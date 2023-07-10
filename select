@@ -1,0 +1,4 @@
+select * from school.course_student;
+select * from school.courses;
+select * from school.groups;
+select * from school.students;

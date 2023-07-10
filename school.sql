@@ -34,8 +34,3 @@ CREATE TABLE IF NOT EXISTS school.course_student
 	FOREIGN KEY (student_id) REFERENCES school.students(student_id),
 	UNIQUE (course_id, student_id)
 );
-
-select * from school.courses;
-select * from school.groups;
-select * from school.students;
-select * from school.course_student;
