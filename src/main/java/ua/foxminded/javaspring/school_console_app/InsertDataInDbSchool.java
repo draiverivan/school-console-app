@@ -7,7 +7,13 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 public class InsertDataInDbSchool {
+
+	private static final Logger logger = LoggerFactory.getLogger(InsertDataInDbSchool.class.getName());
+	private static final String ERROR = "An error occurred: {}";
 
 	List<Group> groupsList = new ArrayList<>();
 
@@ -23,6 +29,7 @@ public class InsertDataInDbSchool {
 				statement.setObject(i + 1, params[i]);
 			}
 			statement.executeUpdate();
+			connection.commit();
 		}
 	}
 
@@ -33,8 +40,7 @@ public class InsertDataInDbSchool {
 			try {
 				insertRecord(connection, INSERT_GROUP_SQL, groupName);
 			} catch (SQLException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+				logger.error(ERROR, e.getMessage(), e);
 			}
 		});
 	}
@@ -47,8 +53,7 @@ public class InsertDataInDbSchool {
 			try {
 				insertRecord(connection, INSERT_COURSE_SQL, nameCourse, decriptionCourse);
 			} catch (SQLException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+				logger.error(ERROR, e.getMessage(), e);
 			}
 		});
 	}
@@ -60,23 +65,22 @@ public class InsertDataInDbSchool {
 		List<Integer> groupIds = new ArrayList<>();
 		try {
 			groupIds = getDataFromDbSchool.getGroupIds(connection);
-		} catch (SQLException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
+		} catch (SQLException e) {
+			logger.error(ERROR, e.getMessage(), e);
 		}
 		List<Integer> finalGroupIds = groupIds;
 		students.forEach(student -> {
-				String firstNameStudent = student.getFirstNameStudent();
-				String lastNameStudent = student.getLastNameStudent();
-				Integer groupId = generateData.generateRandomElement(finalGroupIds);
-				try {
-					insertRecord(connection, INSERT_STUDENT_SQL, groupId, firstNameStudent, lastNameStudent);
-				} catch (SQLException e) {
-					e.printStackTrace();
-				}		
+			String firstNameStudent = student.getFirstNameStudent();
+			String lastNameStudent = student.getLastNameStudent();
+			int groupId = generateData.generateRandomElement(finalGroupIds);
+			try {
+				insertRecord(connection, INSERT_STUDENT_SQL, firstNameStudent, lastNameStudent, groupId);
+			} catch (SQLException e) {
+				logger.error(ERROR, e.getMessage(), e);
+			}
 		});
 	}
-	
+
 	// Insert courses_students
 	public void insertCoursesStudents(Connection connection) {
 		GetDataFromDbSchool getDataFromDbSchool = new GetDataFromDbSchool();
@@ -85,8 +89,7 @@ public class InsertDataInDbSchool {
 		try {
 			courseIds = getDataFromDbSchool.getCourseIds(connection);
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			logger.error(ERROR, e.getMessage(), e);
 		}
 		try {
 			for (int studentId : getDataFromDbSchool.getStudentIds(connection)) {
@@ -101,8 +104,7 @@ public class InsertDataInDbSchool {
 				}
 			}
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			logger.error(ERROR, e.getMessage(), e);
 		}
 	}
 
