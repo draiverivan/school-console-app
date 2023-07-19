@@ -30,7 +30,7 @@ CREATE TABLE IF NOT EXISTS school.course_student
 	junction_id SERIAL PRIMARY KEY,
 	course_id INTEGER,
 	student_id INTEGER,
-	FOREIGN KEY (course_id) REFERENCES school.courses(course_id),
-	FOREIGN KEY (student_id) REFERENCES school.students(student_id),
+	FOREIGN KEY (course_id) REFERENCES school.courses(course_id) ON DELETE CASCADE,
+	FOREIGN KEY (student_id) REFERENCES school.students(student_id) ON DELETE CASCADE,
 	UNIQUE (course_id, student_id)
 );

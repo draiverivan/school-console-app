@@ -13,7 +13,6 @@ public class Group {
 	}
 
 	public Group(String groupName) {
-		super();
 		this.groupName = groupName;
 	}
 

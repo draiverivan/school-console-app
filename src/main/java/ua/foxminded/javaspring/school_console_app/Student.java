@@ -7,13 +7,11 @@ public class Student {
 	private String lastNameStudent;
 
 	public Student(String firstNameStudent, String lastNameStudent) {
-		super();
 		this.firstNameStudent = firstNameStudent;
 		this.lastNameStudent = lastNameStudent;
 	}
 
 	public Student(String groupIdStudent, String firstNameStudent, String lastNameStudent) {
-		super();
 		this.groupIdStudent = groupIdStudent;
 		this.firstNameStudent = firstNameStudent;
 		this.lastNameStudent = lastNameStudent;
