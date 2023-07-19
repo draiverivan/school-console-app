@@ -2,15 +2,15 @@ package ua.foxminded.javaspring.school_console_app;
 
 public class Course {
 
-	private String nameCourse;
+	private String name;
 	private String decriptionCourse;
 
 	public String getNameCourse() {
-		return nameCourse;
+		return name;
 	}
 
 	public void setNameCourse(String nameCourse) {
-		this.nameCourse = nameCourse;
+		this.name = nameCourse;
 	}
 
 	public String getDecriptionCourse() {
@@ -22,7 +22,7 @@ public class Course {
 	}
 
 	public Course(String nameCourse, String decriptionCourse) {
-		this.nameCourse = nameCourse;
+		this.name = nameCourse;
 		this.decriptionCourse = decriptionCourse;
 	}
 }
