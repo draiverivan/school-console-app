@@ -9,9 +9,13 @@ import ua.foxminded.javaspring.school_console_app.dao.CoursesStudetnsDao;
 public class CoursesStudetnsService {
 
 	private static final Random RANDOM = new Random();
+	private final CoursesStudetnsDao coursesStudetnsDao;
+
+	public CoursesStudetnsService(CoursesStudetnsDao coursesStudetnsDao) {
+		this.coursesStudetnsDao = coursesStudetnsDao;
+	}
 
 	public void loadCoursesStudetnsToDatabase(Connection connection) {
-		CoursesStudetnsDao coursesStudetnsDao = new CoursesStudetnsDao();
 		coursesStudetnsDao.insertCoursesStudents(connection);
 	}
 

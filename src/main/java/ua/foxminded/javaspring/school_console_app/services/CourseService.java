@@ -14,9 +14,13 @@ public class CourseService {
 	private static final String[] COURSES_DESCRIPTION = { "learning Mathematics", "learning Biology",
 			"learning Physics", "learning Chemistry", "learning History", "learning English", "learning Art",
 			"learning Music", "learning Computer Science", "learning Geography" };
+	private final CourseDao courseDao;
+
+	public CourseService(CourseDao courseDao) {
+		this.courseDao = courseDao;
+	}
 
 	public void loadCoursesToDatabase(Connection connection) {
-		CourseDao courseDao = new CourseDao();
 		courseDao.insertCourses(connection, generateCourses());
 	}
 
@@ -30,5 +34,4 @@ public class CourseService {
 		}
 		return coursesList;
 	}
-
 }

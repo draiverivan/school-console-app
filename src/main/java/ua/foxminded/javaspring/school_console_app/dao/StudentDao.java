@@ -35,7 +35,8 @@ public class StudentDao {
 	// Insert students
 	public void insertStudents(Connection connection, List<Student> students) {
 		GroupDao groupDao = new GroupDao();
-		StudentService studentService = new StudentService();
+		StudentDao studentDao = new StudentDao();
+		StudentService studentService = new StudentService(studentDao);
 		List<Integer> groupIds = groupDao.getGroupIds(connection);
 		List<Integer> finalGroupIds = groupIds;
 		students.forEach(student -> {

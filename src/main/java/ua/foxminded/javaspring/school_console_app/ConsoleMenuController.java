@@ -14,6 +14,7 @@ import ua.foxminded.javaspring.school_console_app.services.SchoolDatabaseInterac
 public class ConsoleMenuController {
 
 	private static final Logger logger = LoggerFactory.getLogger(ConsoleMenuController.class.getName());
+	private static final String ERROR = "An error occurred: {}";
 	static String url = getProperty("db.url");
 	static String username = getProperty("db.username");
 	static String password = getProperty("db.password");
@@ -25,7 +26,7 @@ public class ConsoleMenuController {
 			schoolDataManagerService.manageSchoolApplication(connection);
 			runConsoleMenu(connection);
 		} catch (SQLException e) {
-			logger.error("An error occurred: {}", e.getMessage(), e);
+			logger.error(ERROR, e.getMessage(), e);
 		}
 	}
 
@@ -42,42 +43,42 @@ public class ConsoleMenuController {
 				try {
 					schoolDatabaseInteractionService.findGroupsWithLessOrEqualStudents(connection);
 				} catch (SQLException e) {
-					logger.error("An error occurred: {}", e.getMessage(), e);
+					logger.error(ERROR, e.getMessage(), e);
 				}
 				break;
 			case "b":
 				try {
 					schoolDatabaseInteractionService.findStudentsByCourseName(connection);
 				} catch (SQLException e) {
-					logger.error("An error occurred: {}", e.getMessage(), e);
+					logger.error(ERROR, e.getMessage(), e);
 				}
 				break;
 			case "c":
 				try {
 					schoolDatabaseInteractionService.addNewStudent(connection);
 				} catch (SQLException e) {
-					logger.error("An error occurred: {}", e.getMessage(), e);
+					logger.error(ERROR, e.getMessage(), e);
 				}
 				break;
 			case "d":
 				try {
 					schoolDatabaseInteractionService.deleteStudentById(connection);
 				} catch (SQLException e) {
-					logger.error("An error occurred: {}", e.getMessage(), e);
+					logger.error(ERROR, e.getMessage(), e);
 				}
 				break;
 			case "e":
 				try {
 					schoolDatabaseInteractionService.addStudentToCourse(connection);
 				} catch (SQLException e) {
-					logger.error("An error occurred: {}", e.getMessage(), e);
+					logger.error(ERROR, e.getMessage(), e);
 				}
 				break;
 			case "f":
 				try {
 					schoolDatabaseInteractionService.removeStudentFromCourse(connection);
 				} catch (SQLException e) {
-					logger.error("An error occurred: {}", e.getMessage(), e);
+					logger.error(ERROR, e.getMessage(), e);
 				}
 				break;
 			case "exit":

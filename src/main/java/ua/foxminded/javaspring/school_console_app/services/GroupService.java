@@ -11,9 +11,13 @@ import ua.foxminded.javaspring.school_console_app.model.Group;
 public class GroupService {
 
 	private static final Random RANDOM = new Random();
+	private final GroupDao groupDao;
+	
+	public GroupService(GroupDao groupDao) {
+		this.groupDao = groupDao;
+	}
 
 	public void loadGroupsToDatabase(Connection connection) {
-		GroupDao groupDao = new GroupDao();
 		groupDao.insertGroups(connection, generateGroups());
 	}
 

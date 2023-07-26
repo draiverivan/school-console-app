@@ -2,18 +2,29 @@ package ua.foxminded.javaspring.school_console_app.services;
 
 import java.sql.Connection;
 
+import ua.foxminded.javaspring.school_console_app.dao.CourseDao;
+import ua.foxminded.javaspring.school_console_app.dao.CoursesStudetnsDao;
+import ua.foxminded.javaspring.school_console_app.dao.GroupDao;
+import ua.foxminded.javaspring.school_console_app.dao.StudentDao;
+
 public class SchoolDataManagerService {
 
 	public void manageSchoolApplication(Connection connection) {
 
-		CreatorSchemaOfDatabaseService creatorSchemaOfDatabaseService = new CreatorSchemaOfDatabaseService();
+		DatabaseSchemaCreatorService creatorSchemaOfDatabaseService = new DatabaseSchemaCreatorService();
 		creatorSchemaOfDatabaseService.createSchemaOfDatabase(connection);
-		CourseService courseService = new CourseService();
+		CourseDao courseDao = new CourseDao();
+		CourseService courseService = new CourseService(courseDao);
 		courseService.loadCoursesToDatabase(connection);
-		GroupService groupService = new GroupService();
+		GroupDao groupDao = new GroupDao();
+		GroupService groupService = new GroupService(groupDao);
 		groupService.loadGroupsToDatabase(connection);
-		StudentService studentService = new StudentService();
+		StudentDao studentDao = new StudentDao();
+		StudentService studentService = new StudentService(studentDao);
 		studentService.loadStudentsToDatabase(connection);
+		CoursesStudetnsDao coursesStudetnsDao = new CoursesStudetnsDao();
+		CoursesStudetnsService coursesStudetnsService = new CoursesStudetnsService(coursesStudetnsDao);
+		coursesStudetnsService.loadCoursesStudetnsToDatabase(connection);
 
 	}
 

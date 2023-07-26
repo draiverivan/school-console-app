@@ -35,7 +35,8 @@ public class CoursesStudetnsDao {
 	public void insertCoursesStudents(Connection connection) {
 		CourseDao courseDao = new CourseDao();
 		StudentDao studentDao = new StudentDao();
-		CoursesStudetnsService coursesStudetnsService = new CoursesStudetnsService();
+		CoursesStudetnsDao coursesStudetnsDao = new CoursesStudetnsDao();
+		CoursesStudetnsService coursesStudetnsService = new CoursesStudetnsService(coursesStudetnsDao);
 		List<Integer> courseIds = courseDao.getCourseIds(connection);
 		try {
 			for (int studentId : studentDao.getStudentIds(connection)) {

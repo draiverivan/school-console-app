@@ -30,7 +30,7 @@ public class CourseDao {
 
 	// Insert courses
 	public void insertCourses(Connection connection, List<Course> courses) {
-		courses.stream().forEach(course -> {
+		courses.forEach(course -> {
 			String nameCourse = course.getName();
 			String decriptionCourse = course.getDescription();
 			try {

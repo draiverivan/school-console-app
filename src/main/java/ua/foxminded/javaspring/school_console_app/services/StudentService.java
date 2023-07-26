@@ -5,7 +5,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-import ua.foxminded.javaspring.school_console_app.dao.GroupDao;
 import ua.foxminded.javaspring.school_console_app.dao.StudentDao;
 import ua.foxminded.javaspring.school_console_app.model.Student;
 
@@ -17,9 +16,13 @@ public class StudentService {
 			"Harris", "Irwin", "Johnson", "Kim", "Lee", "Martinez", "Nguyen", "O'Connor", "Patel", "Quinn", "Rodriguez",
 			"Smith", "Taylor" };
 	private static final Random RANDOM = new Random();
+	private final StudentDao studentDao;
+
+	public StudentService(StudentDao studentDao) {
+		this.studentDao = studentDao;
+	}
 
 	public void loadStudentsToDatabase(Connection connection) {
-		StudentDao studentDao = new StudentDao();
 		studentDao.insertStudents(connection, generateStudents());
 	}
 

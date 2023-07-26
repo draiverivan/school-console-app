@@ -9,9 +9,9 @@ import org.apache.ibatis.jdbc.ScriptRunner;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class CreatorSchemaOfDatabaseService {
+public class DatabaseSchemaCreatorService {
 
-	private static final Logger logger = LoggerFactory.getLogger(CreatorSchemaOfDatabaseService.class.getName());
+	private static final Logger logger = LoggerFactory.getLogger(DatabaseSchemaCreatorService.class.getName());
 
 	public void createSchemaOfDatabase(Connection connection) {
 

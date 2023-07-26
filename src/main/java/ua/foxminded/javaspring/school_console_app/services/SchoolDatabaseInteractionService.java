@@ -36,7 +36,7 @@ public class SchoolDatabaseInteractionService {
 			while (resultSet.next()) {
 				String groupName = resultSet.getString("group_name");
 				int numStudents = resultSet.getInt("num_students");
-				logger.info("Group: " + groupName + " | Number of Students: " + numStudents);
+				logger.info("Group: {} | Number of Students: {}", groupName, numStudents);
 			}
 		}
 	}
@@ -55,11 +55,11 @@ public class SchoolDatabaseInteractionService {
 		try (PreparedStatement statement = connection.prepareStatement(sql)) {
 			statement.setString(1, courseName);
 			ResultSet resultSet = statement.executeQuery();
-			logger.info("Students related to the course '" + courseName + "':");
+			logger.info("Students related to the course '{}':", courseName);
 			while (resultSet.next()) {
 				String firstName = resultSet.getString("first_name");
 				String lastName = resultSet.getString("last_name");
-				logger.info("Student: " + firstName + " " + lastName);
+				logger.info("Student: {} {}", firstName, lastName);
 			}
 		}
 	}
@@ -77,7 +77,7 @@ public class SchoolDatabaseInteractionService {
 
 		try (PreparedStatement statement = connection.prepareStatement(sql)) {
 			GroupDao groupDao = new GroupDao();
-			GroupService groupService = new GroupService();
+			GroupService groupService = new GroupService(groupDao);
 			List<Integer> groupIds = groupDao.getGroupIds(connection);
 			int groupId = groupService.generateRandomElement(groupIds);
 			statement.setString(1, firstName);
@@ -103,9 +103,9 @@ public class SchoolDatabaseInteractionService {
 			int rowsAffected = statement.executeUpdate();
 			connection.commit(); // Commit the transaction
 			if (rowsAffected > 0) {
-				logger.info("Student with ID " + studentId + " deleted successfully.");
+				logger.info("Student with ID {} deleted successfully.", studentId);
 			} else {
-				logger.info("No student found with ID " + studentId + ".");
+				logger.info("No student found with ID {}.", studentId);
 			}
 		}
 	}
@@ -133,9 +133,9 @@ public class SchoolDatabaseInteractionService {
 		// Add the student to the course
 		if (courseId != -1) {
 			addStudentToCourse(connection, studentId, courseId);
-			logger.info("Student with ID " + studentId + " added to course '" + courseName + "'.");
+			logger.info("Student with ID {} added to course '{}'.", studentId, courseName);
 		} else {
-			logger.info("Course '" + courseName + "' not found.");
+			logger.info("Course '{}' not found.", courseName);
 		}
 	}
 
@@ -204,7 +204,7 @@ public class SchoolDatabaseInteractionService {
 
 		// Remove the student from the course
 		removeStudentFromCourse(connection, studentId, courseName);
-		logger.info("Student with ID " + studentId + " removed from course '" + courseName + "'.");
+		logger.info("Student with ID {} removed from course '{}'.", studentId, courseName);
 	}
 
 	public void removeStudentFromCourse(Connection connection, int studentId, String courseName) throws SQLException {
@@ -221,14 +221,13 @@ public class SchoolDatabaseInteractionService {
 				int rowsAffected = statement.executeUpdate();
 				connection.commit(); // Commit the transaction
 				if (rowsAffected > 0) {
-					logger.info("Student with ID " + studentId + " removed from course with ID " + courseId + ".");
+					logger.info("Student with ID {} removed from course with ID {}.", studentId, courseId);
 				} else {
-					System.out.println("No enrollment found for student with ID " + studentId + " in course with ID "
-							+ courseId + ".");
+					logger.info("No enrollment found for student with ID {} in course with ID {}.", studentId, courseId);
 				}
 			}
 		} else {
-			logger.info("Course '" + courseName + "' not found.");
+			logger.info("Course '{}' not found.", courseName);
 		}
 	}
 

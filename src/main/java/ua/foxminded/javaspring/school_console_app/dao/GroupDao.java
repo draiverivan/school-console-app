@@ -32,7 +32,7 @@ public class GroupDao {
 
 	// Insert groups
 	public void insertGroups(Connection connection, List<Group> groups) {
-		groups.stream().forEach(group -> {
+		groups.forEach(group -> {
 			String groupName = group.getName();
 			try {
 				insertRecord(connection, INSERT_GROUP_SQL, groupName);
