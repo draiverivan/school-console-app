@@ -10,9 +10,9 @@ import ua.foxminded.javaspring.school_console_app.model.Student;
 
 public class StudentService {
 
-	private static final String[] FIRST_NAMES = { "Alice", "Bob", "Charlie", "David", "Eve", "Frank", "Grace", "Heidi",
+	public static final String[] FIRST_NAMES = { "Alice", "Bob", "Charlie", "David", "Eve", "Frank", "Grace", "Heidi",
 			"Ivan", "Judy", "Kevin", "Laura", "Mike", "Nancy", "Olivia", "Peter", "Quincy", "Rita", "Steve", "Tina" };
-	private static final String[] LAST_NAMES = { "Adams", "Brown", "Clark", "Davis", "Evans", "Foster", "Garcia",
+	public static final String[] LAST_NAMES = { "Adams", "Brown", "Clark", "Davis", "Evans", "Foster", "Garcia",
 			"Harris", "Irwin", "Johnson", "Kim", "Lee", "Martinez", "Nguyen", "O'Connor", "Patel", "Quinn", "Rodriguez",
 			"Smith", "Taylor" };
 	private static final Random RANDOM = new Random();

@@ -22,13 +22,16 @@ public class StudentDao {
 	public static final String GET_STUDENT_IDS = "SELECT student_id FROM school.students";
 	List<Group> groupsList = new ArrayList<>();
 
-	public void insertRecord(Connection connection, String sql, Object... params) throws SQLException {
+	public void insertRecord(Connection connection, String sql, Object... params) {
 		try (PreparedStatement statement = connection.prepareStatement(sql)) {
 			for (int i = 0; i < params.length; i++) {
 				statement.setObject(i + 1, params[i]);
 			}
 			statement.executeUpdate();
 			connection.commit();
+		} catch (SQLException e) {
+			logger.error(ERROR, e.getMessage(), e);
+			throw new StudentDataAccessException("Error occurred during insert record operation.", e);
 		}
 	}
 
@@ -43,11 +46,7 @@ public class StudentDao {
 			String firstNameStudent = student.getFirstName();
 			String lastNameStudent = student.getLastName();
 			int groupId = studentService.generateRandomElement(finalGroupIds);
-			try {
-				insertRecord(connection, INSERT_STUDENT_SQL, firstNameStudent, lastNameStudent, groupId);
-			} catch (SQLException e) {
-				logger.error(ERROR, e.getMessage(), e);
-			}
+			insertRecord(connection, INSERT_STUDENT_SQL, firstNameStudent, lastNameStudent, groupId);
 		});
 	}
 
@@ -61,8 +60,8 @@ public class StudentDao {
 			}
 		} catch (SQLException e) {
 			logger.error(ERROR, e.getMessage(), e);
+			throw new StudentDataAccessException("Error occurred during get student IDs operation.", e);
 		}
 		return ids;
 	}
-
 }

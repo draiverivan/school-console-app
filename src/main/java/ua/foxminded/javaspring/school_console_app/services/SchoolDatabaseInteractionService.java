@@ -110,35 +110,6 @@ public class SchoolDatabaseInteractionService {
 		}
 	}
 
-	public void addStudentToCourse(Connection connection) throws SQLException {
-		// Prompt the user for the student ID
-		logger.info("Enter the ID of the student:");
-		int studentId = scanner.nextInt();
-		scanner.nextLine(); // Consume the newline character
-
-		// Show available courses for the student
-		logger.info("Available courses for the student:");
-		List<String> availableCourses = getAvailableCoursesForStudent(connection, studentId);
-		for (String course : availableCourses) {
-			logger.info(course);
-		}
-
-		// Prompt the user for the course name
-		logger.info("Enter the name of the course:");
-		String courseName = scanner.nextLine();
-
-		// Get the course ID based on the course name
-		int courseId = getCourseIdByName(connection, courseName);
-
-		// Add the student to the course
-		if (courseId != -1) {
-			addStudentToCourse(connection, studentId, courseId);
-			logger.info("Student with ID {} added to course '{}'.", studentId, courseName);
-		} else {
-			logger.info("Course '{}' not found.", courseName);
-		}
-	}
-
 	public List<String> getAvailableCoursesForStudent(Connection connection, int studentId) throws SQLException {
 		// Write your SQL query to get the available courses for the student
 		String sql = "SELECT c.course_name " + "FROM school.courses c "
@@ -173,6 +144,40 @@ public class SchoolDatabaseInteractionService {
 		return -1; // Course not found
 	}
 
+	public void addStudentToCourse(Connection connection) throws SQLException {
+		// Prompt the user for the student ID
+		logger.info("Enter the ID of the student:");
+		int studentId = scanner.nextInt();
+		scanner.nextLine(); // Consume the newline character
+
+		if (!studentExists(connection, studentId)) {
+			logger.info("No student found with ID {}.", studentId);
+			return; // Exit the method if the student does not exist
+		}
+
+		// Show available courses for the student
+		logger.info("Available courses for the student:");
+		List<String> availableCourses = getAvailableCoursesForStudent(connection, studentId);
+		for (String course : availableCourses) {
+			logger.info(course);
+		}
+
+		// Prompt the user for the course name
+		logger.info("Enter the name of the course:");
+		String courseName = scanner.nextLine();
+
+		// Get the course ID based on the course name
+		int courseId = getCourseIdByName(connection, courseName);
+
+		// Add the student to the course
+		if (courseId != -1) {
+			addStudentToCourse(connection, studentId, courseId);
+			logger.info("Student with ID {} added to course '{}'.", studentId, courseName);
+		} else {
+			logger.info("Course '{}' not found.", courseName);
+		}
+	}
+
 	public void addStudentToCourse(Connection connection, int studentId, int courseId) throws SQLException {
 		// Write your SQL query to add a student to the course
 		String sql = "INSERT INTO school.course_student (course_id, student_id) VALUES (?, ?)";
@@ -204,7 +209,6 @@ public class SchoolDatabaseInteractionService {
 
 		// Remove the student from the course
 		removeStudentFromCourse(connection, studentId, courseName);
-		logger.info("Student with ID {} removed from course '{}'.", studentId, courseName);
 	}
 
 	public void removeStudentFromCourse(Connection connection, int studentId, String courseName) throws SQLException {
@@ -221,9 +225,10 @@ public class SchoolDatabaseInteractionService {
 				int rowsAffected = statement.executeUpdate();
 				connection.commit(); // Commit the transaction
 				if (rowsAffected > 0) {
-					logger.info("Student with ID {} removed from course with ID {}.", studentId, courseId);
+					logger.info("Student with ID {} removed from course '{}'.", studentId, courseName);
 				} else {
-					logger.info("No enrollment found for student with ID {} in course with ID {}.", studentId, courseId);
+					logger.info("No enrollment found for student with ID {} in course {}.", studentId,
+							courseName);
 				}
 			}
 		} else {
@@ -248,5 +253,20 @@ public class SchoolDatabaseInteractionService {
 		}
 
 		return enrolledCourses;
+	}
+
+	public boolean studentExists(Connection connection, int studentId) throws SQLException {
+		String sql = "SELECT COUNT(*) FROM school.students WHERE student_id = ?";
+
+		try (PreparedStatement statement = connection.prepareStatement(sql)) {
+			statement.setInt(1, studentId);
+			ResultSet resultSet = statement.executeQuery();
+
+			if (resultSet.next()) {
+				return resultSet.getInt(1) > 0;
+			}
+		}
+
+		return false; // Return false if student not found
 	}
 }

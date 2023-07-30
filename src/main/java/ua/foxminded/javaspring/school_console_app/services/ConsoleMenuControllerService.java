@@ -1,4 +1,4 @@
-package ua.foxminded.javaspring.school_console_app;
+package ua.foxminded.javaspring.school_console_app.services;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -8,21 +8,28 @@ import java.util.Scanner;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import ua.foxminded.javaspring.school_console_app.services.SchoolDataManagerService;
-import ua.foxminded.javaspring.school_console_app.services.SchoolDatabaseInteractionService;
+public class ConsoleMenuControllerService {
 
-public class ConsoleMenuController {
-
-	private static final Logger logger = LoggerFactory.getLogger(ConsoleMenuController.class.getName());
+	private static final Logger logger = LoggerFactory.getLogger(ConsoleMenuControllerService.class.getName());
 	private static final String ERROR = "An error occurred: {}";
-	static String url = getProperty("db.url");
-	static String username = getProperty("db.username");
-	static String password = getProperty("db.password");
+	private String url = getProperty("db.url");
+	private String username = getProperty("db.username");
+	private String password = getProperty("db.password");
+	private final SchoolDataManagerService schoolDataManagerService;
+	private final SchoolDatabaseInteractionService schoolDatabaseInteractionService;
+	private final Scanner scanner;
 
-	public static void main(String[] args) {
+	public ConsoleMenuControllerService(SchoolDataManagerService schoolDataManagerService,
+			SchoolDatabaseInteractionService schoolDatabaseInteractionService, Scanner scanner) {
+
+		this.schoolDataManagerService = schoolDataManagerService;
+		this.schoolDatabaseInteractionService = schoolDatabaseInteractionService;
+		this.scanner = scanner;
+	}
+
+	public void runSchoolDataManagerService() {
 
 		try (Connection connection = DriverManager.getConnection(url, username, password)) {
-			SchoolDataManagerService schoolDataManagerService = new SchoolDataManagerService();
 			schoolDataManagerService.manageSchoolApplication(connection);
 			runConsoleMenu(connection);
 		} catch (SQLException e) {
@@ -30,10 +37,8 @@ public class ConsoleMenuController {
 		}
 	}
 
-	public static void runConsoleMenu(Connection connection) {
-		Scanner scanner = new Scanner(System.in);
+	public void runConsoleMenu(Connection connection) {
 		String choice = "";
-		SchoolDatabaseInteractionService schoolDatabaseInteractionService = new SchoolDatabaseInteractionService();
 
 		while (!choice.equalsIgnoreCase("exit")) {
 			displayMenu();
@@ -92,7 +97,7 @@ public class ConsoleMenuController {
 		scanner.close();
 	}
 
-	private static void displayMenu() {
+	private void displayMenu() {
 		logger.info("======= Console Menu =======");
 		logger.info("a. Find all groups with less or equal students’ number");
 		logger.info("b. Find all students related to the course with the given name");
@@ -105,7 +110,8 @@ public class ConsoleMenuController {
 		logger.info("Enter your choice:");
 	}
 
-	private static String getProperty(String key) {
+	private String getProperty(String key) {
 		return System.getenv(key);
 	}
+
 }

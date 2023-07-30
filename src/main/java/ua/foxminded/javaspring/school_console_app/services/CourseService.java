@@ -9,9 +9,9 @@ import ua.foxminded.javaspring.school_console_app.model.Course;
 
 public class CourseService {
 
-	private static final String[] COURSES = { "Math", "Biology", "Physics", "Chemistry", "History", "English", "Art",
+	public static final String[] COURSES = { "Math", "Biology", "Physics", "Chemistry", "History", "English", "Art",
 			"Music", "Computer Science", "Geography" };
-	private static final String[] COURSES_DESCRIPTION = { "learning Mathematics", "learning Biology",
+	public static final String[] COURSES_DESCRIPTION = { "learning Mathematics", "learning Biology",
 			"learning Physics", "learning Chemistry", "learning History", "learning English", "learning Art",
 			"learning Music", "learning Computer Science", "learning Geography" };
 	private final CourseDao courseDao;

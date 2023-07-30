@@ -18,13 +18,16 @@ public class CourseDao {
 	private static final String INSERT_COURSE_SQL = "INSERT INTO school.courses (course_name, course_description) VALUES (?, ?)";
 	private static final String GET_COURSE_IDS_SQL = "SELECT course_id FROM school.courses";
 
-	public void insertRecord(Connection connection, String sql, Object... params) throws SQLException {
+	public void insertRecord(Connection connection, String sql, Object... params) {
 		try (PreparedStatement statement = connection.prepareStatement(sql)) {
 			for (int i = 0; i < params.length; i++) {
 				statement.setObject(i + 1, params[i]);
 			}
 			statement.executeUpdate();
 			connection.commit();
+		} catch (SQLException e) {
+			logger.error(ERROR, e.getMessage(), e);
+			throw new CourseDataAccessException("Error occurred during insert record operation.", e);
 		}
 	}
 
@@ -33,11 +36,7 @@ public class CourseDao {
 		courses.forEach(course -> {
 			String nameCourse = course.getName();
 			String decriptionCourse = course.getDescription();
-			try {
-				insertRecord(connection, INSERT_COURSE_SQL, nameCourse, decriptionCourse);
-			} catch (SQLException e) {
-				logger.error(ERROR, e.getMessage(), e);
-			}
+			insertRecord(connection, INSERT_COURSE_SQL, nameCourse, decriptionCourse);
 		});
 	}
 
@@ -51,6 +50,7 @@ public class CourseDao {
 			}
 		} catch (SQLException e) {
 			logger.error(ERROR, e.getMessage(), e);
+			throw new CourseDataAccessException("Error occurred during get course IDs operation.", e);
 		}
 		return ids;
 	}
