@@ -1,4 +1,4 @@
-package ua.foxminded.javaspring.school_console_app;
+package ua.foxminded.javaspring.school_console_app.dao;
 
 import org.junit.jupiter.api.*;
 import org.slf4j.Logger;
@@ -6,7 +6,6 @@ import org.slf4j.LoggerFactory;
 import org.testcontainers.containers.PostgreSQLContainer;
 import org.testcontainers.junit.jupiter.Container;
 import org.testcontainers.junit.jupiter.Testcontainers;
-import ua.foxminded.javaspring.school_console_app.dao.CourseDao;
 import ua.foxminded.javaspring.school_console_app.model.Course;
 
 import java.sql.Connection;
@@ -53,12 +52,12 @@ public class CourseDaoIntegrationTest {
 
 	// Method to delete all records from the courses table
 	private void cleanUpCoursesTable() {
-		try (Statement statement = connection.createStatement()) {
-			statement.executeUpdate("DELETE FROM school.courses");
-			connection.commit();
-		} catch (SQLException e) {
-			logger.error(ERROR, e.getMessage(), e);
-		}
+	    try (PreparedStatement preparedStatement = connection.prepareStatement("DELETE FROM school.courses")) {
+	        preparedStatement.executeUpdate();
+	        connection.commit();
+	    } catch (SQLException e) {
+	        logger.error(ERROR, e.getMessage(), e);
+	    }
 	}
 
 	@BeforeEach
@@ -82,7 +81,7 @@ public class CourseDaoIntegrationTest {
 	}
 
 	@Test
-	public void testInsertCourses() {
+	void insertCourses_shouldInsertCoursesWhenGivenCourseList() {
 		List<Course> courses = new ArrayList<>();
 		courses.add(new Course(1, "Mathematics", "Advanced Math"));
 		courses.add(new Course(2, "English", "Language and Literature"));
@@ -99,7 +98,7 @@ public class CourseDaoIntegrationTest {
 	}
 
 	@Test
-	public void testGetCourseIds() {
+	void getCourseIds_shouldReturnCourseIdsWhenCoursesAreInserted() {
 		List<Course> courses = new ArrayList<>();
 		courses.add(new Course(1, "Mathematics", "Advanced Math"));
 		courses.add(new Course(2, "English", "Language and Literature"));

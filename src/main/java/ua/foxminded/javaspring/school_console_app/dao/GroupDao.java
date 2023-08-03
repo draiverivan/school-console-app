@@ -10,6 +10,7 @@ import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import ua.foxminded.javaspring.school_console_app.exceptions.GroupDataAccessException;
 import ua.foxminded.javaspring.school_console_app.model.Group;
 
 public class GroupDao {

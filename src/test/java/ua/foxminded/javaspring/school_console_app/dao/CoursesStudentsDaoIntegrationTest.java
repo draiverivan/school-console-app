@@ -1,4 +1,4 @@
-package ua.foxminded.javaspring.school_console_app;
+package ua.foxminded.javaspring.school_console_app.dao;
 
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -21,10 +21,6 @@ import org.testcontainers.containers.PostgreSQLContainer;
 import org.testcontainers.junit.jupiter.Container;
 import org.testcontainers.junit.jupiter.Testcontainers;
 
-import ua.foxminded.javaspring.school_console_app.dao.CourseDao;
-import ua.foxminded.javaspring.school_console_app.dao.CoursesStudentsDao;
-import ua.foxminded.javaspring.school_console_app.dao.GroupDao;
-import ua.foxminded.javaspring.school_console_app.dao.StudentDao;
 import ua.foxminded.javaspring.school_console_app.model.Course;
 import ua.foxminded.javaspring.school_console_app.model.Group;
 import ua.foxminded.javaspring.school_console_app.model.Student;
@@ -98,7 +94,7 @@ public class CoursesStudentsDaoIntegrationTest {
 	}
 
 	@Test
-	public void testInsertCoursesStudents() {
+	void insertCoursesStudents_shouldInsertCoursesStudentsWhenDataProvided() {
 		List<Course> courses = new ArrayList<>();
 		courses.add(new Course(1, "Mathematics", "Advanced Math"));
 		courses.add(new Course(2, "English", "Language and Literature"));

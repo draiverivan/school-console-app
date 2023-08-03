@@ -1,4 +1,4 @@
-package ua.foxminded.javaspring.school_console_app;
+package ua.foxminded.javaspring.school_console_app.services;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -9,8 +9,6 @@ import java.util.regex.Pattern;
 
 import ua.foxminded.javaspring.school_console_app.dao.GroupDao;
 import ua.foxminded.javaspring.school_console_app.model.Group;
-import ua.foxminded.javaspring.school_console_app.services.GroupService;
-
 import org.mockito.Mockito;
 
 public class GroupServiceTest {
@@ -25,7 +23,7 @@ public class GroupServiceTest {
     }
 
     @Test
-    public void generateGroups_shouldReturnListOfGroups() {
+    void generateGroups_shouldGenerateCorrectNumberOfGroups() {
         List<Group> generatedGroups = groupService.generateGroups();
 
         assertNotNull(generatedGroups);

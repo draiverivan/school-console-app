@@ -1,4 +1,4 @@
-package ua.foxminded.javaspring.school_console_app;
+package ua.foxminded.javaspring.school_console_app.services;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -8,8 +8,6 @@ import java.util.List;
 
 import ua.foxminded.javaspring.school_console_app.dao.CourseDao;
 import ua.foxminded.javaspring.school_console_app.model.Course;
-import ua.foxminded.javaspring.school_console_app.services.CourseService;
-
 import org.mockito.Mockito;
 
 public class CourseServiceTest {
@@ -24,7 +22,7 @@ public class CourseServiceTest {
     }
 
     @Test
-    public void generateCourses_shouldReturnListOfCourses() {
+    void generateCourses_shouldGenerateCorrectNumberOfCourses() {
         List<Course> generatedCourses = courseService.generateCourses();
 
         assertNotNull(generatedCourses);

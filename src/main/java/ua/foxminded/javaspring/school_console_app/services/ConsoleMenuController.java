@@ -8,9 +8,9 @@ import java.util.Scanner;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class ConsoleMenuControllerService {
+public class ConsoleMenuController {
 
-	private static final Logger logger = LoggerFactory.getLogger(ConsoleMenuControllerService.class.getName());
+	private static final Logger logger = LoggerFactory.getLogger(ConsoleMenuController.class.getName());
 	private static final String ERROR = "An error occurred: {}";
 	private String url = getProperty("db.url");
 	private String username = getProperty("db.username");
@@ -19,7 +19,7 @@ public class ConsoleMenuControllerService {
 	private final SchoolDatabaseInteractionService schoolDatabaseInteractionService;
 	private final Scanner scanner;
 
-	public ConsoleMenuControllerService(SchoolDataManagerService schoolDataManagerService,
+	public ConsoleMenuController(SchoolDataManagerService schoolDataManagerService,
 			SchoolDatabaseInteractionService schoolDatabaseInteractionService, Scanner scanner) {
 
 		this.schoolDataManagerService = schoolDataManagerService;
@@ -43,48 +43,30 @@ public class ConsoleMenuControllerService {
 		while (!choice.equalsIgnoreCase("exit")) {
 			displayMenu();
 			choice = scanner.nextLine();
-			switch (choice) {
+			handleMenuChoice(choice, connection);
+		}
+		scanner.close();
+	}
+
+	private void handleMenuChoice(String choice, Connection connection) {
+		switch (choice) {
 			case "a":
-				try {
-					schoolDatabaseInteractionService.findGroupsWithLessOrEqualStudents(connection);
-				} catch (SQLException e) {
-					logger.error(ERROR, e.getMessage(), e);
-				}
+				handleFindGroupsWithLessOrEqualStudents(connection);
 				break;
 			case "b":
-				try {
-					schoolDatabaseInteractionService.findStudentsByCourseName(connection);
-				} catch (SQLException e) {
-					logger.error(ERROR, e.getMessage(), e);
-				}
+				handleFindStudentsByCourseName(connection);
 				break;
 			case "c":
-				try {
-					schoolDatabaseInteractionService.addNewStudent(connection);
-				} catch (SQLException e) {
-					logger.error(ERROR, e.getMessage(), e);
-				}
+				handleAddNewStudent(connection);
 				break;
 			case "d":
-				try {
-					schoolDatabaseInteractionService.deleteStudentById(connection);
-				} catch (SQLException e) {
-					logger.error(ERROR, e.getMessage(), e);
-				}
+				handleDeleteStudentById(connection);
 				break;
 			case "e":
-				try {
-					schoolDatabaseInteractionService.addStudentToCourse(connection);
-				} catch (SQLException e) {
-					logger.error(ERROR, e.getMessage(), e);
-				}
+				handleAddStudentToCourse(connection);
 				break;
 			case "f":
-				try {
-					schoolDatabaseInteractionService.removeStudentFromCourse(connection);
-				} catch (SQLException e) {
-					logger.error(ERROR, e.getMessage(), e);
-				}
+				handleRemoveStudentFromCourse(connection);
 				break;
 			case "exit":
 				logger.info("Exiting the program.");
@@ -92,9 +74,55 @@ public class ConsoleMenuControllerService {
 			default:
 				logger.info("Invalid choice. Please try again.");
 				break;
-			}
 		}
-		scanner.close();
+	}
+
+	private void handleFindGroupsWithLessOrEqualStudents(Connection connection) {
+		try {
+			schoolDatabaseInteractionService.findGroupsWithLessOrEqualStudents(connection);
+		} catch (SQLException e) {
+			logger.error(ERROR, e.getMessage(), e);
+		}
+	}
+
+	private void handleFindStudentsByCourseName(Connection connection) {
+		try {
+			schoolDatabaseInteractionService.findStudentsByCourseName(connection);
+		} catch (SQLException e) {
+			logger.error(ERROR, e.getMessage(), e);
+		}
+	}
+
+	private void handleAddNewStudent(Connection connection) {
+		try {
+			schoolDatabaseInteractionService.addNewStudent(connection);
+		} catch (SQLException e) {
+			logger.error(ERROR, e.getMessage(), e);
+		}
+	}
+
+	private void handleDeleteStudentById(Connection connection) {
+		try {
+			schoolDatabaseInteractionService.deleteStudentById(connection);
+		} catch (SQLException e) {
+			logger.error(ERROR, e.getMessage(), e);
+		}
+	}
+
+	private void handleAddStudentToCourse(Connection connection) {
+		try {
+			schoolDatabaseInteractionService.addStudentToCourse(connection);
+		} catch (SQLException e) {
+			logger.error(ERROR, e.getMessage(), e);
+		}
+	}
+
+	private void handleRemoveStudentFromCourse(Connection connection) {
+		try {
+			schoolDatabaseInteractionService.removeStudentFromCourse(connection);
+		} catch (SQLException e) {
+			logger.error(ERROR, e.getMessage(), e);
+		}
 	}
 
 	private void displayMenu() {
