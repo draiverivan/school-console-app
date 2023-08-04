@@ -35,7 +35,7 @@ public class Group {
     if (o == null || getClass() != o.getClass())
       return false;
     Group group = (Group) o;
-    return id == group.id && Objects.equals(name, group.name);
+    return Objects.equals(name, group.name);
   }
 
   @Override

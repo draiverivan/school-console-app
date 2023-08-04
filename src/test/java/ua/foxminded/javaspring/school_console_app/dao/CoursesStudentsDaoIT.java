@@ -26,15 +26,15 @@ import ua.foxminded.javaspring.school_console_app.model.Group;
 import ua.foxminded.javaspring.school_console_app.model.Student;
 
 @Testcontainers
-public class CoursesStudentsDaoIntegrationTest {
+public class CoursesStudentsDaoIT {
 
-	private static final Logger logger = LoggerFactory.getLogger(CoursesStudentsDaoIntegrationTest.class.getName());
+	private static final Logger logger = LoggerFactory.getLogger(CoursesStudentsDaoIT.class.getName());
 
 	@Container
 	private static final PostgreSQLContainer<?> postgresContainer = new PostgreSQLContainer<>("postgres:latest")
 			.withDatabaseName("school").withUsername("testuser").withPassword("testpassword");
 
-	private CoursesStudentsDao coursesStudentsDao;
+	private CourseStudentRelationDao coursesStudentsDao;
 	private Connection connection;
 	private CourseDao courseDao;
 	private StudentDao studentDao;
@@ -78,10 +78,10 @@ public class CoursesStudentsDaoIntegrationTest {
 		String username = postgresContainer.getUsername();
 		String password = postgresContainer.getPassword();
 		connection = DriverManager.getConnection(jdbcUrl, username, password);
-		coursesStudentsDao = new CoursesStudentsDao();
 		courseDao = new CourseDao();
 		studentDao = new StudentDao();
 		groupDao = new GroupDao();
+		coursesStudentsDao = new CourseStudentRelationDao(courseDao, studentDao);
 		connection.setAutoCommit(false);
 
 	}

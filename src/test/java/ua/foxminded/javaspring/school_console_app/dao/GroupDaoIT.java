@@ -6,9 +6,7 @@ import org.slf4j.LoggerFactory;
 import org.testcontainers.containers.PostgreSQLContainer;
 import org.testcontainers.junit.jupiter.Container;
 import org.testcontainers.junit.jupiter.Testcontainers;
-
 import ua.foxminded.javaspring.school_console_app.model.Group;
-import ua.foxminded.javaspring.school_console_app.model.Student;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -21,16 +19,15 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @Testcontainers
-public class StudentDaoIntegrationTest {
+public class GroupDaoIT {
 
-	private static final Logger logger = LoggerFactory.getLogger(StudentDaoIntegrationTest.class.getName());
+	private static final Logger logger = LoggerFactory.getLogger(GroupDaoIT.class.getName());
 
 	@Container
 	private static final PostgreSQLContainer<?> postgresContainer = new PostgreSQLContainer<>("postgres:latest")
 			.withDatabaseName("school").withUsername("testuser").withPassword("testpassword");
 
 	private Connection connection;
-	private StudentDao studentDao;
 	private GroupDao groupDao;
 	private static final String ERROR = "An error occurred: {}";
 
@@ -47,20 +44,6 @@ public class StudentDaoIntegrationTest {
 			// Create the groups table
 			statement.executeUpdate("CREATE TABLE IF NOT EXISTS school.groups (" + "group_id SERIAL PRIMARY KEY,"
 					+ "group_name VARCHAR(50) UNIQUE NOT NULL" + ")");
-
-			// Create the students table
-			statement.executeUpdate("CREATE TABLE IF NOT EXISTS school.students (" + "student_id SERIAL PRIMARY KEY,"
-					+ "group_id INTEGER," + "FOREIGN KEY (group_id) REFERENCES school.groups(group_id),"
-					+ "first_name VARCHAR(50) NOT NULL," + "last_name VARCHAR(50) NOT NULL" + ")");
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
-	}
-
-	private void cleanUpStudentsTable() {
-		try (Statement statement = connection.createStatement()) {
-			statement.executeUpdate("DELETE FROM school.students");
-			connection.commit();
 		} catch (SQLException e) {
 			logger.error(ERROR, e.getMessage(), e);
 		}
@@ -83,10 +66,8 @@ public class StudentDaoIntegrationTest {
 
 		connection = DriverManager.getConnection(jdbcUrl, username, password);
 		connection.setAutoCommit(false);
-		studentDao = new StudentDao();
 		groupDao = new GroupDao();
 
-		cleanUpStudentsTable();
 		cleanUpGroupsTable();
 	}
 
@@ -97,57 +78,46 @@ public class StudentDaoIntegrationTest {
 	}
 
 	@Test
-	void insertStudents_shouldInsertStudentsWhenGivenStudentList() {
+	void insertGroups_shouldInsertGroupsWhenGivenGroupList() {
 		List<Group> groups = new ArrayList<>();
 		groups.add(new Group(1, "Group 1"));
 		groups.add(new Group(2, "Group 2"));
+
 		groupDao.insertGroups(connection, groups);
 
-		List<Student> students = new ArrayList<>();
-		students.add(new Student(1, null, "John", "Doe"));
-		students.add(new Student(2, null, "Jane", "Doe"));
-		studentDao.insertStudents(connection, students);
+		List<Group> insertedGroups = fetchGroupsFromDatabase();
+		assertEquals(groups.size(), insertedGroups.size(), "Number of inserted groups should match");
 
-		List<Student> insertedStudents = fetchStudentsFromDatabase();
-		assertEquals(students.size(), insertedStudents.size(), "Number of inserted students should match");
-
-		for (int i = 0; i < students.size(); i++) {
-			assertEquals(students.get(i), insertedStudents.get(i), "Inserted student details should match");
+		for (int i = 0; i < groups.size(); i++) {
+			assertEquals(groups.get(i), insertedGroups.get(i), "Inserted group details should match");
 		}
 	}
 
 	@Test
-	void getStudentIds_shouldReturnStudentIdsWhenStudentsAreInserted() {
-
+	void getGroupIds_shouldReturnGroupIdsWhenGroupsAreInserted() {
 		List<Group> groups = new ArrayList<>();
 		groups.add(new Group(1, "Group 1"));
 		groups.add(new Group(2, "Group 2"));
+
 		groupDao.insertGroups(connection, groups);
 
-		List<Student> students = new ArrayList<>();
-		students.add(new Student(1, "Group 1", "John", "Doe"));
-		students.add(new Student(2, "Group 2", "Jane", "Doe"));
-		studentDao.insertStudents(connection, students);
-
-		List<Integer> studentIds = studentDao.getStudentIds(connection);
-		assertEquals(students.size(), studentIds.size(), "Number of inserted student IDs should match");
+		List<Integer> groupIds = groupDao.getGroupIds(connection);
+		assertEquals(groups.size(), groupIds.size(), "Number of inserted group IDs should match");
 	}
 
-	private List<Student> fetchStudentsFromDatabase() {
-		List<Student> students = new ArrayList<>();
-		try (PreparedStatement statement = connection.prepareStatement("SELECT * FROM school.students");
+	private List<Group> fetchGroupsFromDatabase() {
+		List<Group> groups = new ArrayList<>();
+		try (PreparedStatement statement = connection.prepareStatement("SELECT * FROM school.groups");
 				ResultSet resultSet = statement.executeQuery()) {
 			while (resultSet.next()) {
-				long studentId = resultSet.getLong("student_id");
-				String groupIdStudent = resultSet.getString("group_id");
-				String firstName = resultSet.getString("first_name");
-				String lastName = resultSet.getString("last_name");
-				students.add(new Student(studentId, groupIdStudent, firstName, lastName));
+				long groupId = resultSet.getLong("group_id");
+				String groupName = resultSet.getString("group_name");
+				groups.add(new Group(groupId, groupName));
 			}
 		} catch (SQLException e) {
 			logger.error(ERROR, e.getMessage(), e);
 		}
-		return students;
+		return groups;
 	}
 
 }

@@ -1,4 +1,4 @@
-package ua.foxminded.javaspring.school_console_app.services;
+package ua.foxminded.javaspring.school_console_app.controllers;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -8,6 +8,9 @@ import java.util.Scanner;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import ua.foxminded.javaspring.school_console_app.dao.SchoolDatabaseInteractionDao;
+import ua.foxminded.javaspring.school_console_app.services.SchoolDataManagerService;
+
 public class ConsoleMenuController {
 
 	private static final Logger logger = LoggerFactory.getLogger(ConsoleMenuController.class.getName());
@@ -16,11 +19,11 @@ public class ConsoleMenuController {
 	private String username = getProperty("db.username");
 	private String password = getProperty("db.password");
 	private final SchoolDataManagerService schoolDataManagerService;
-	private final SchoolDatabaseInteractionService schoolDatabaseInteractionService;
+	private final SchoolDatabaseInteractionDao schoolDatabaseInteractionService;
 	private final Scanner scanner;
 
 	public ConsoleMenuController(SchoolDataManagerService schoolDataManagerService,
-			SchoolDatabaseInteractionService schoolDatabaseInteractionService, Scanner scanner) {
+			SchoolDatabaseInteractionDao schoolDatabaseInteractionService, Scanner scanner) {
 
 		this.schoolDataManagerService = schoolDataManagerService;
 		this.schoolDatabaseInteractionService = schoolDatabaseInteractionService;

@@ -1,5 +1,6 @@
-package ua.foxminded.javaspring.school_console_app.services;
+package ua.foxminded.javaspring.school_console_app.dao;
 
+import java.io.InputStream;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -11,12 +12,20 @@ import java.util.Scanner;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import ua.foxminded.javaspring.school_console_app.dao.GroupDao;
+import ua.foxminded.javaspring.school_console_app.services.GroupService;
 
-public class SchoolDatabaseInteractionService {
+public class SchoolDatabaseInteractionDao {
 
-	private static final Logger logger = LoggerFactory.getLogger(SchoolDatabaseInteractionService.class.getName());
-	private static final Scanner scanner = new Scanner(System.in);
+	private static final Logger logger = LoggerFactory.getLogger(SchoolDatabaseInteractionDao.class.getName());
+	private Scanner scanner;
+
+	public SchoolDatabaseInteractionDao() {
+		this(System.in);
+	}
+
+	public SchoolDatabaseInteractionDao(InputStream in) {
+		this.scanner = new Scanner(in);
+	}
 
 	public void findGroupsWithLessOrEqualStudents(Connection connection) throws SQLException {
 		// Write your SQL query to find all groups with less or equal students' number
@@ -227,8 +236,7 @@ public class SchoolDatabaseInteractionService {
 				if (rowsAffected > 0) {
 					logger.info("Student with ID {} removed from course '{}'.", studentId, courseName);
 				} else {
-					logger.info("No enrollment found for student with ID {} in course {}.", studentId,
-							courseName);
+					logger.info("No enrollment found for student with ID {} in course {}.", studentId, courseName);
 				}
 			}
 		} else {

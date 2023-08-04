@@ -3,7 +3,7 @@ package ua.foxminded.javaspring.school_console_app.services;
 import java.sql.Connection;
 
 import ua.foxminded.javaspring.school_console_app.dao.CourseDao;
-import ua.foxminded.javaspring.school_console_app.dao.CoursesStudentsDao;
+import ua.foxminded.javaspring.school_console_app.dao.CourseStudentRelationDao;
 import ua.foxminded.javaspring.school_console_app.dao.GroupDao;
 import ua.foxminded.javaspring.school_console_app.dao.StudentDao;
 
@@ -22,9 +22,10 @@ public class SchoolDataManagerService {
 		StudentDao studentDao = new StudentDao();
 		StudentService studentService = new StudentService(studentDao);
 		studentService.loadStudentsToDatabase(connection);
-		CoursesStudentsDao coursesStudetnsDao = new CoursesStudentsDao();
-		CoursesStudetnsService coursesStudetnsService = new CoursesStudetnsService(coursesStudetnsDao);
-		coursesStudetnsService.loadCoursesStudetnsToDatabase(connection);
+		CourseStudentRelationDao courseStudentRelationDao = new CourseStudentRelationDao(courseDao, studentDao);
+		CourseStudentRelationService courseStudentRelationService = new CourseStudentRelationService(
+				courseStudentRelationDao);
+		courseStudentRelationService.loadCoursesStudetnsToDatabase(connection);
 
 	}
 

@@ -19,9 +19,9 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @Testcontainers
-public class CourseDaoIntegrationTest {
+public class CourseDaoIT {
 	
-	private static final Logger logger = LoggerFactory.getLogger(CourseDaoIntegrationTest.class.getName());
+	private static final Logger logger = LoggerFactory.getLogger(CourseDaoIT.class.getName());
 
 	@Container
 	private static final PostgreSQLContainer<?> postgresContainer = new PostgreSQLContainer<>("postgres:latest")
