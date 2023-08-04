@@ -7,9 +7,9 @@
 >_Using PostgreSQL DB._
 
 
-## Step-by-step:
+## Step-by-step
 
-On startup, it run SQL script with table creation from previously created files. If tables already exist - drop them.
+On startup, it runs SQL script with table creation from previously created files. If tables already exist - drop them.
 
 Auto-generate the test data:
 
